@@ -1,0 +1,15 @@
+---
+language: ruby
+script: script/test
+rvm:
+  - 2.1.10
+  - 2.2.10
+  - 2.3.8
+  - 2.4.5
+  - 2.5.3
+  - 2.6.0
+before_install: gem install re2
+addons:
+ apt:
+   packages:
+     - libre2-dev
