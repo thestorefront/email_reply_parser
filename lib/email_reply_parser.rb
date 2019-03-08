@@ -83,7 +83,13 @@ class EmailReplyParser
 
       # Check for multi-line reply headers. Some clients break up
       # the "On DATE, NAME <EMAIL> wrote:" line into multiple lines.
-      if text =~ /^(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)$/m
+
+      # if text =~ /^(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)$/m
+      #   # Remove all new lines from the reply header.
+      #   text.gsub! $1, $1.gsub("\n", " ")
+      # end
+
+      if MULTILINE_FROM_REGEX.any? { |regexp| text =~ regexp }
         # Remove all new lines from the reply header.
         text.gsub! $1, $1.gsub("\n", " ")
       end
@@ -132,7 +138,31 @@ class EmailReplyParser
 
   private
     EMPTY = "".freeze
-    SIGNATURE = '(?m)(--\s*$|__\s*$|\w-$)|(^(\w+\s*){1,3} ym morf tneS$)'
+    # Detects `Sent from my new iPhone 7`
+    # or
+    # --
+    # or
+    # __
+    # or
+    SIGNATURE = '(?m)(--\s*$|==\s*$|__\s*$|\w-$)|(^(\w+\s*){1,3} ym morf tneS$)'
+
+
+    DETECT_QUOTE_REGEX = [
+      #En
+      /^On.*wrote:$/,
+      /^(From|Sent|To|Subject):.*$/,
+
+      # Fr
+      /^Le (jeu|lun|ven|dim|mar|sam|mer)\. \d{1,2} \w{3,5}\. .*$/
+    ]
+
+    MULTILINE_FROM_REGEX = [
+      # EN
+      /^(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)$/m,
+
+      # Fr
+      /^Le (jeu|lun|ven|dim|mar|sam|mer)\. \d{1,2} \w{3,5}\.*$/
+    ]
 
     begin
       require 're2'
@@ -155,7 +185,7 @@ class EmailReplyParser
 
       # We're looking for leading `>`'s to see if this line is part of a
       # quoted Fragment.
-      is_quoted = !!(line =~ /(>+)$/)
+      is_quoted = !!(line =~ />+$|^\s?$|^=*\s*$/)
 
       # Mark the current Fragment as a signature if the current line is empty
       # and the Fragment starts with a common signature indicator.
@@ -171,7 +201,7 @@ class EmailReplyParser
       # it doesn't start with `>`.
       if @fragment &&
           ((@fragment.quoted? == is_quoted) ||
-           (@fragment.quoted? && (quote_header?(line) || line == EMPTY)))
+           (@fragment.quoted? && (quote_header?(line) || line == EMPTY )))
         @fragment.lines << line
 
       # Otherwise, finish the fragment and start a new one.
@@ -188,7 +218,16 @@ class EmailReplyParser
     #
     # Returns true if the line is a valid header, or false.
     def quote_header?(line)
-      line =~ /^:etorw.*nO$/ || line =~ /^.*:(morF|tneS|oT|tcejbuS)$/
+      actual_line = line.reverse
+      puts actual_line
+      DETECT_QUOTE_REGEX.any? do | regexp |
+        puts regexp
+        puts '>>>>>>>>'
+        puts actual_line =~ regexp
+        puts '>>>>>>>>'
+        actual_line =~ regexp
+      end
+      # line =~ /^:etorw.*nO$/ || line =~ /^.*:(morF|tneS|oT|tcejbuS)$/
     end
 
     # Builds the fragment string and reverses it, after all lines have been

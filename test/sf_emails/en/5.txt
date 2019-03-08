@@ -1,0 +1,18 @@
+Hello Person,
+
+Message content goes here!
+
+Good to hear from you!
+
+This is still message content!
+
+--
+
+This is a signature (denoted by a line containing just two dashes followed by two empty lines) and should be removed
+
+From: Sender Name
+Sent: February 20, 2019 1:25 AM
+To: recipient@example.com
+Subject: Email subject line here
+
+All of the quoted email is in this section here and should be removed.

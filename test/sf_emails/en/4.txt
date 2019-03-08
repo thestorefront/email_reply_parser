@@ -1,0 +1,14 @@
+Hello Person,
+
+Message content goes here!
+
+Good to hear from you!
+
+This is still message content!
+
+From: Sender Name
+Sent: February 20, 2019 1:25 AM
+To: recipient@example.com
+Subject: Email subject line here
+
+All of the quoted email is in this section here and should be removed.
