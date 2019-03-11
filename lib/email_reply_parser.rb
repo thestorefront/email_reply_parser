@@ -153,15 +153,18 @@ class EmailReplyParser
       /^(From|Sent|To|Subject):.*$/,
 
       # Fr
-      /^Le (jeu|lun|ven|dim|mar|sam|mer)\. \d{1,2} \w{3,5}\. .*$/
+      /^Le (jeu|lun|ven|dim|mar|sam|mer)\. \d{1,2} \w{3,5}\. .*$/,
+
+      # Nl
+      /^Op (ma|di|wo|do|vr|za|zo) \d{1,2} \w{3,5}\. .*<$/,
+
+      # It
+      /^Il giorno (lun|mar|mer|gio|ven|sab|dom) \d{1,2} \w{3,5}\ .*<$/
     ]
 
     MULTILINE_FROM_REGEX = [
       # EN
-      /^(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)$/m,
-
-      # Fr
-      /^Le (jeu|lun|ven|dim|mar|sam|mer)\. \d{1,2} \w{3,5}\.*$/
+      /^(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)$/m
     ]
 
     begin
@@ -219,12 +222,7 @@ class EmailReplyParser
     # Returns true if the line is a valid header, or false.
     def quote_header?(line)
       actual_line = line.reverse
-      # puts actual_line
       DETECT_QUOTE_REGEX.any? do | regexp |
-        # puts regexp
-        # puts '>>>>>>>>'
-        # puts actual_line =~ regexp
-        # puts '>>>>>>>>'
         actual_line =~ regexp
       end
       # line =~ /^:etorw.*nO$/ || line =~ /^.*:(morF|tneS|oT|tcejbuS)$/
