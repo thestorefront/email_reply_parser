@@ -197,7 +197,7 @@ class EmailReplyParser
       # it doesn't start with `>`.
       if @fragment &&
           ((@fragment.quoted? == is_quoted) ||
-           (@fragment.quoted? && (quote_header?(line) || line == EMPTY )))
+           (@fragment.quoted? && (quote_header?(line) || line == EMPTY)))
         @fragment.lines << line
 
       # Otherwise, finish the fragment and start a new one.
