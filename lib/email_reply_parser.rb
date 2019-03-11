@@ -137,7 +137,6 @@ class EmailReplyParser
     # --
     # or
     # __
-    # or
     SIGNATURE = '(?m)(--\s*$|__\s*$|\w-$)|(^(\w+\s*){1,3} ym morf tneS$)'
 
 
@@ -219,7 +218,6 @@ class EmailReplyParser
       DETECT_QUOTE_REGEX.any? do | regexp |
         actual_line =~ regexp
       end
-      # line =~ /^:etorw.*nO$/ || line =~ /^.*:(morF|tneS|oT|tcejbuS)$/
     end
 
     # Builds the fragment string and reverses it, after all lines have been
