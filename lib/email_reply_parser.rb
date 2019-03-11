@@ -185,7 +185,7 @@ class EmailReplyParser
 
       # We're looking for leading `>`'s to see if this line is part of a
       # quoted Fragment.
-      is_quoted = !!(line =~ />+$|^\s?$|^=*\s*$/)
+      is_quoted = !!(line =~ /(>+)$/)
 
       # Mark the current Fragment as a signature if the current line is empty
       # and the Fragment starts with a common signature indicator.

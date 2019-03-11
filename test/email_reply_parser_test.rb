@@ -22,9 +22,8 @@ class EmailReplyParserTest < Test::Unit::TestCase
   end
 
   def test_french_language
-    body = IO.read SF_EMAIL_FIXTURE_PATH.join("1.txt").to_s
+    body = IO.read EMAIL_FIXTURE_PATH.join("fr/1.txt").to_s
     reply = EmailReplyParser.read(body)
-    assert_equal(8, reply.fragments.size)
     assert_equal("Hello Person,\n\nMessage content goes here !\n\nGood to hear from you !\n\nThis is still message content !", reply.visible_text)
   end
 
