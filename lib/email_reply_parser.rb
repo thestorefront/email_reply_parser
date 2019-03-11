@@ -144,7 +144,7 @@ class EmailReplyParser
     # or
     # __
     # or
-    SIGNATURE = '(?m)(--\s*$|==\s*$|__\s*$|\w-$)|(^(\w+\s*){1,3} ym morf tneS$)'
+    SIGNATURE = '(?m)(--\s*$|__\s*$|\w-$)|(^(\w+\s*){1,3} ym morf tneS$)'
 
 
     DETECT_QUOTE_REGEX = [
@@ -219,12 +219,12 @@ class EmailReplyParser
     # Returns true if the line is a valid header, or false.
     def quote_header?(line)
       actual_line = line.reverse
-      puts actual_line
+      # puts actual_line
       DETECT_QUOTE_REGEX.any? do | regexp |
-        puts regexp
-        puts '>>>>>>>>'
-        puts actual_line =~ regexp
-        puts '>>>>>>>>'
+        # puts regexp
+        # puts '>>>>>>>>'
+        # puts actual_line =~ regexp
+        # puts '>>>>>>>>'
         actual_line =~ regexp
       end
       # line =~ /^:etorw.*nO$/ || line =~ /^.*:(morF|tneS|oT|tcejbuS)$/
