@@ -47,6 +47,7 @@ class EmailReplyParserTest < Test::Unit::TestCase
   def test_en_language
     test_language(:en)
   end
+
   def test_it_language
     test_language(:it)
   end
