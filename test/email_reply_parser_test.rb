@@ -7,7 +7,6 @@ dir = Pathname.new File.expand_path(File.dirname(__FILE__))
 require dir + '..' + 'lib' + 'email_reply_parser'
 
 EMAIL_FIXTURE_PATH = dir + 'emails'
-SF_EMAIL_FIXTURE_PATH = dir + 'sf_emails/fr'
 
 class EmailReplyParserTest < Test::Unit::TestCase
   def test_encoding_should_be_maintained
