@@ -152,7 +152,10 @@ class EmailReplyParser
       /^Op (ma|di|wo|do|vr|za|zo) \d{1,2} \w{3,5}\. .*<$/,
 
       # It
-      /^Il giorno (lun|mar|mer|gio|ven|sab|dom) \d{1,2} \w{3,5}\ .*<$/
+      /^Il giorno (lun|mar|mer|gio|ven|sab|dom) \d{1,2} \w{3,5}\ .*<$/,
+
+      # Line where the email is split into multiple lines
+      />:$/
     ]
 
     MULTILINE_FROM_REGEX = [
