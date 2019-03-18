@@ -83,7 +83,7 @@ class EmailReplyParser
 
       # Check for multi-line reply headers. Some clients break up
       # the "On DATE, NAME <EMAIL> wrote:" line into multiple lines.
-      if text =~ /^(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)$/m
+      if MULTILINE_FROM_REGEX.any? { |regexp| text =~ regexp }
         # Remove all new lines from the reply header.
         text.gsub! $1, $1.gsub("\n", " ")
       end
@@ -132,7 +132,36 @@ class EmailReplyParser
 
   private
     EMPTY = "".freeze
+    # Detects `Sent from my new iPhone 7`
+    # or
+    # --
+    # or
+    # __
     SIGNATURE = '(?m)(--\s*$|__\s*$|\w-$)|(^(\w+\s*){1,3} ym morf tneS$)'
+
+
+    DETECT_QUOTE_REGEX = [
+      #En
+      /^On.*wrote:$/,
+      /^(From|Sent|To|Subject):.*$/,
+
+      # Fr
+      /^Le (jeu|lun|ven|dim|mar|sam|mer)\. \d{1,2} \w{3,5}\. .*$/,
+
+      # Nl
+      /^Op (ma|di|wo|do|vr|za|zo) \d{1,2} \w{3,5}\. .*<$/,
+
+      # It
+      /^Il giorno (lun|mar|mer|gio|ven|sab|dom) \d{1,2} \w{3,5}\ .*<$/,
+
+      # Line where the email is split into multiple lines
+      />:$/
+    ]
+
+    MULTILINE_FROM_REGEX = [
+      # EN
+      /^(?!On.*On\s.+?wrote:)(On\s(.+?)wrote:)$/m
+    ]
 
     begin
       require 're2'
@@ -188,7 +217,10 @@ class EmailReplyParser
     #
     # Returns true if the line is a valid header, or false.
     def quote_header?(line)
-      line =~ /^:etorw.*nO$/ || line =~ /^.*:(morF|tneS|oT|tcejbuS)$/
+      actual_line = line.reverse
+      DETECT_QUOTE_REGEX.any? do | regexp |
+        actual_line =~ regexp
+      end
     end
 
     # Builds the fragment string and reverses it, after all lines have been

@@ -20,6 +20,37 @@ class EmailReplyParserTest < Test::Unit::TestCase
     end
   end
 
+  def test_language(language_abbreviation)
+    # Get the number of files in the given language directory
+    file_count = Dir[EMAIL_FIXTURE_PATH.join("#{language_abbreviation}/*")].size
+
+    file_count.times do |current_file_index|
+      # Files are named starting with index 1 so begin iterator at 1
+      file_name = current_file_index + 1
+
+      # Read the body of the email for each of the files in the iteration and convert to a string
+      body = IO.read EMAIL_FIXTURE_PATH.join("#{language_abbreviation}/#{file_name}.txt").to_s
+      reply = EmailReplyParser.read(body)
+      assert_equal(base_email_content(language_abbreviation), reply.visible_text)
+    end
+  end
+
+  def test_fr_language
+    test_language(:fr)
+  end
+  
+  def test_nl_language
+    test_language(:nl)
+  end
+
+  def test_en_language
+    test_language(:en)
+  end
+
+  def test_it_language
+    test_language(:it)
+  end
+
   def test_reads_simple_body
     reply = email(:email_1_1)
     assert_equal 3, reply.fragments.size
@@ -225,5 +256,15 @@ I am currently using the Java HTTP API.\n", reply.fragments[0].to_s
   def email(name)
     body = IO.read EMAIL_FIXTURE_PATH.join("#{name}.txt").to_s
     EmailReplyParser.read body
+  end
+
+  def base_email_content(language_abbreviation)
+    base = {
+      fr: "Hello Person,\n\nMessage content goes here !\n\nGood to hear from you !\n\nThis is still message content !",
+      en: "Hello Person,\n\nMessage content goes here !\n\nGood to hear from you !\n\nThis is still message content !",
+      nl: "Hi Person,\n\nMessage content goes here.\n\nGood to hear from you.\n\nThis is still message content.",
+      it: "Hello person,\n\nText body here.\n\nItalian.",
+    }
+    return base[language_abbreviation]
   end
 end
